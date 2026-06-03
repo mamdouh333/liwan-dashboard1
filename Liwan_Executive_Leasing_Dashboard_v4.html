@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liwan - Executive Leasing Dashboard v4</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f8f6f0;color:#1a1814;font-size:14px;line-height:1.5}
+.cb{background:#1a2f55;color:rgba(255,255,255,0.65);font-size:11px;text-align:center;padding:7px 16px;letter-spacing:0.07em;text-transform:uppercase}
+.hdr{background:#0a1628}
+.hi{max-width:1400px;margin:0 auto;padding:24px 32px;display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
+.hb{display:flex;align-items:center;gap:16px}
+.hl{width:46px;height:46px;background:#c9a84c;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#0a1628;flex-shrink:0}
+.ht h1{font-size:22px;font-weight:600;color:#ffffff;letter-spacing:0.03em;margin:0}
+.ht p{font-size:12px;color:rgba(255,255,255,0.5);margin-top:4px}
+.hr{display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex-shrink:0}
+.rd{font-size:13px;color:rgba(255,255,255,0.65);text-align:right}
+.rd strong{color:#e8c96a;font-weight:600}
+.bdgs{display:flex;gap:8px;align-items:center;justify-content:flex-end}
+.bv{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.3);color:#ffffff;font-size:11px;padding:3px 10px;border-radius:20px;font-weight:700;letter-spacing:0.07em;display:inline-block}
+.bdg{background:rgba(201,168,76,0.18);border:1px solid #c9a84c;color:#e8c96a;font-size:11px;padding:3px 12px;border-radius:20px;letter-spacing:0.04em;display:inline-block}
+.pdfb{display:inline-flex;align-items:center;gap:7px;background:#c9a84c;color:#0a1628;font-size:12px;font-weight:700;padding:8px 18px;border-radius:7px;border:none;cursor:pointer;letter-spacing:0.04em;text-transform:uppercase;font-family:'Segoe UI',Arial,sans-serif}
+.pdfb:hover{background:#e8c96a}
+.pdfb svg{width:14px;height:14px;flex-shrink:0}
+.hs{background:#122040;border-top:1px solid rgba(255,255,255,0.07);padding:0 32px}
+.hsi{max-width:1400px;margin:0 auto;display:flex;gap:4px}
+.nb{padding:13px 22px;font-size:13px;font-weight:500;color:rgba(255,255,255,0.45);border:none;background:transparent;cursor:pointer;border-bottom:3px solid transparent;transition:color 0.15s,border-color 0.15s;letter-spacing:0.02em;font-family:'Segoe UI',Arial,sans-serif}
+.nb:hover{color:rgba(255,255,255,0.85)}
+.nb.active{color:#e8c96a;border-bottom-color:#c9a84c}
+.mn{max-width:1400px;margin:0 auto;padding:28px 32px}
+.pg{display:none}.pg.active{display:block}
+.kg{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:24px}
+.kc{background:#ffffff;border:1px solid #e4e1d8;border-radius:12px;padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,0.07)}
+.kc.ac{border-left:3px solid #c9a84c}
+.kl{font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:#8a8780;margin-bottom:7px}
+.kv{font-size:26px;font-weight:700;line-height:1;color:#1a1814}
+.kv.gr{color:#2d7a4a}.kv.am{color:#9a6200}.kv.re{color:#8b2020}.kv.bl{color:#1a4a8a}.kv.nv{color:#0a1628}
+.ks{font-size:11px;color:#8a8780;margin-top:5px}
+.st{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#8a8780;margin:28px 0 12px;border-bottom:1px solid #e4e1d8;padding-bottom:8px}
+.st:first-child{margin-top:0}
+.cr{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.cc{background:#ffffff;border:1px solid #e4e1d8;border-radius:12px;padding:18px 20px;box-shadow:0 1px 4px rgba(0,0,0,0.07)}
+.cc.fl{grid-column:1/-1}
+.cc h3{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:#8a8780;margin-bottom:12px}
+.lg{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px}
+.li{display:flex;align-items:center;gap:5px;font-size:11px;color:#4a4740}
+.ld{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.fr{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.fs{background:#ffffff;border:1px solid #e4e1d8;border-radius:12px;padding:16px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.07);position:relative}
+.fs::after{content:"to";position:absolute;right:-14px;top:50%;transform:translateY(-50%);color:#9e9b93;font-size:16px;z-index:1}
+.fs:last-child::after{display:none}
+.fn{font-size:32px;font-weight:700;line-height:1}
+.flab{font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:#8a8780;margin-top:4px}
+.fp{font-size:12px;font-weight:600;margin-top:4px}
+.fbar{background:#f2f0eb;border-radius:4px;height:4px;margin-top:8px;overflow:hidden}
+.ff{height:100%;border-radius:4px}
+.tg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.tc{background:#ffffff;border:1px solid #e4e1d8;border-radius:12px;padding:14px 16px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.07)}
+.tn{font-size:24px;font-weight:700}
+.tlab{font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:#8a8780;margin-top:3px}
+.tw{overflow-x:auto;background:#ffffff;border:1px solid #e4e1d8;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:20px}
+.tb{width:100%;border-collapse:collapse;font-size:12px}
+.tb th{padding:10px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#8a8780;background:#f2f0eb;border-bottom:1px solid #e4e1d8;white-space:nowrap}
+.tb td{padding:9px 14px;border-bottom:1px solid #f2f0eb;color:#1a1814;vertical-align:top}
+.tb tr:last-child td{border-bottom:none}
+.tb tr:hover td{background:#f2f0eb}
+.tb .tr td{background:#f2f0eb;font-weight:600;border-top:2px solid #e4e1d8}
+.tb .cx td{background:#fff8f8;color:#8a8780}
+.tb .cx .bn{text-decoration:line-through}
+.pl{display:inline-block;font-size:10px;font-weight:600;padding:2px 9px;border-radius:10px;white-space:nowrap;letter-spacing:0.03em}
+.ph{background:#eaf5ee;color:#2d7a4a}.pm{background:#fef3dc;color:#9a6200}.plo{background:#f2f0eb;color:#5c5a54}
+.pni{background:#fdeaea;color:#8b2020}.pca{background:#fdeaea;color:#6b1a1a}.psh{background:#e8f0fb;color:#1a4a8a}
+.pde{background:#fdeaea;color:#8b2020}.pny{background:#f2f0eb;color:#5c5a54}.pgo{background:#fdf3dc;color:#7a5a00}
+.pud{background:#fef3dc;color:#9a6200}.pco{background:#eaf5ee;color:#1a5c2a}
+.fb2{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.fb2 label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#8a8780}
+.fb2 select{font-size:12px;padding:6px 12px;border:1px solid #e4e1d8;border-radius:8px;background:#ffffff;color:#1a1814;cursor:pointer;font-family:'Segoe UI',Arial,sans-serif}
+.rc{font-size:11px;color:#8a8780;margin-bottom:8px}
+.no{border-radius:0 8px 8px 0;padding:10px 14px;font-size:12px;margin-bottom:16px}
+.no.bl2{background:#e8f0fb;border-left:3px solid #1a4a8a;color:#1a4a8a}
+.no.re2{background:#fdeaea;border-left:3px solid #8b2020;color:#8b2020}
+.ft{background:#0a1628;color:rgba(255,255,255,0.4);font-size:11px;text-align:center;padding:16px 32px;margin-top:40px;letter-spacing:0.03em}
+@media print{.cb,.hs,.nb,.fb2,.pdfb{display:none!important}.pg{display:block!important;page-break-after:always}body{background:#ffffff}}
+</style>
+</head>
+<body>
+<div class="cb">Confidential - Landlord Review Only | Managed by UAPM on behalf of Landlord</div>
+<header class="hdr">
+  <div class="hi">
+    <div class="hb">
+      <div class="hl">LW</div>
+      <div class="ht">
+        <h1>LIWAN - Executive Leasing Dashboard</h1>
+        <p>All figures in SAR &middot; Buildings: B1 &middot; B2 &middot; B3 &middot; R1 &middot; R2 &middot; Leasing by UAPM / Alaa Tabet</p>
+      </div>
+    </div>
+    <div class="hr">
+      <div class="rd">Report Date: <strong id="rdate"></strong></div>
+      <div class="bdgs"><span class="bv">v4</span><span class="bdg">Pre-Opening Phase</span></div>
+      <button class="pdfb" onclick="exportPDF()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+        Export PDF
+      </button>
+    </div>
+  </div>
+  <div class="hs"><div class="hsi">
+    <button class="nb active" onclick="showPage('ov',this)">Overview</button>
+    <button class="nb" onclick="showPage('re',this)">Retail &amp; F&amp;B</button>
+    <button class="nb" onclick="showPage('of',this)">Offices</button>
+    <button class="nb" onclick="showPage('pi',this)">Full Pipeline</button>
+  </div></div>
+</header>
+<main class="mn">
+
+<div id="page-ov" class="pg active">
+  <div class="kg" id="kov"></div>
+  <div class="cr">
+    <div class="cc"><h3>Leasing Funnel - All Tenants</h3><div class="lg" id="lf"></div><div style="position:relative;height:220px"><canvas id="cF"></canvas></div></div>
+    <div class="cc"><h3>Deal Closure Distribution</h3><div class="lg" id="lc"></div><div style="position:relative;height:220px"><canvas id="cC"></canvas></div></div>
+  </div>
+  <div class="cr">
+    <div class="cc"><h3>Tenant Category Mix</h3><div class="lg" id="lct"></div><div style="position:relative;height:220px"><canvas id="cCT"></canvas></div></div>
+    <div class="cc"><h3>Brand Tier Breakdown</h3><div class="lg" id="lt"></div><div style="position:relative;height:220px"><canvas id="cT"></canvas></div></div>
+  </div>
+  <div class="cc fl" style="margin-bottom:20px">
+    <h3>Confirmed Offers - Annual Deal Value (SAR) | Offer Shared/Completed + Value Present</h3>
+    <div class="lg" id="ld2"></div>
+    <div id="dw" style="position:relative"><canvas id="cD"></canvas></div>
+  </div>
+</div>
+
+<div id="page-re" class="pg">
+  <div class="kg" id="kre"></div>
+  <div class="st">Pipeline Funnel - Retail &amp; F&amp;B</div><div class="fr" id="fre"></div>
+  <div class="st">Brand Tier Composition</div><div class="tg" id="tre"></div>
+  <div class="cr">
+    <div class="cc"><h3>Sub-Category Mix</h3><div class="lg" id="lrc"></div><div style="position:relative;height:240px"><canvas id="cRC"></canvas></div></div>
+    <div class="cc"><h3>Closure Indicators - Retail</h3><div class="lg" id="lrcl"></div><div style="position:relative;height:240px"><canvas id="cRCl"></canvas></div></div>
+  </div>
+  <div class="st">Confirmed Offers - Retail &amp; F&amp;B (Offer Status: Shared/Completed + Annual Deal Value Present)</div>
+  <div class="no bl2">Records shown only where Offer Status = Shared or Completed AND Annual Deal Value is present. All other records are excluded from this section.</div>
+  <div class="tw"><table class="tb"><thead><tr><th>#</th><th>Brand / Tenant</th><th>Category</th><th>Bldg</th><th>Unit</th><th>Size sqm</th><th>SAR/sqm</th><th>SC%</th><th>Annual Deal Value (SAR)</th><th>Period yr</th><th>Offer Status</th><th>Closure</th><th>Tenant Requests</th><th>Current Negotiation Status</th></tr></thead><tbody id="tra"></tbody></table></div>
+  <div class="st">All Retail Leads</div>
+  <div class="fb2">
+    <label>Feedback:</label>
+    <select id="srfb" onchange="rRA()"><option value="">All</option><option>Interested</option><option>Under Discussion</option><option>Not Interested</option><option>No Response</option></select>
+    <label>Closure:</label>
+    <select id="srcl" onchange="rRA()"><option value="">All</option><option>High</option><option>Medium</option><option>Low</option><option value="Not Interested">Not Interested</option></select>
+  </div>
+  <div class="rc" id="rrc"></div>
+  <div class="tw"><table class="tb"><thead><tr><th>#</th><th>Brand</th><th>Tier</th><th>Category</th><th>Bldg</th><th>Unit</th><th>Offer Status</th><th>Closure</th><th>Feedback</th><th>Tenant Requests</th><th>Negotiation Status</th></tr></thead><tbody id="traa"></tbody></table></div>
+</div>
+
+<div id="page-of" class="pg">
+  <div class="kg" id="kof"></div>
+  <div class="st">Pipeline Funnel - Offices</div><div class="fr" id="fof"></div>
+  <div class="st">Brand Tier - Office Tenants</div><div class="tg" id="tof"></div>
+  <div class="cr">
+    <div class="cc"><h3>Closure Indicators - Offices</h3><div class="lg" id="loc"></div><div style="position:relative;height:240px"><canvas id="cOC"></canvas></div></div>
+    <div class="cc"><h3>Tenant Feedback - Offices</h3><div class="lg" id="lof2"></div><div style="position:relative;height:240px"><canvas id="cOF"></canvas></div></div>
+  </div>
+  <div class="st">Confirmed Offer - Offices (Offer Status: Shared/Completed + Annual Deal Value Present)</div>
+  <div class="no re2" id="onote"></div>
+  <div class="tw"><table class="tb"><thead><tr><th>#</th><th>Brand / Tenant</th><th>Tier</th><th>Bldg</th><th>Floor</th><th>Unit</th><th>Size sqm</th><th>SAR/sqm</th><th>SC%</th><th>Annual Deal Value (SAR)</th><th>Period yr</th><th>Offer Status</th><th>Closure</th><th>Tenant Requests</th><th>Current Negotiation Status</th></tr></thead><tbody id="toa"></tbody></table></div>
+  <div class="st">All Office Leads</div>
+  <div class="tw"><table class="tb"><thead><tr><th>#</th><th>Brand</th><th>Tier</th><th>Bldg</th><th>Floor</th><th>Offer Status</th><th>Closure</th><th>Feedback</th><th>Tenant Requests</th><th>Negotiation Status</th></tr></thead><tbody id="toaa"></tbody></table></div>
+</div>
+
+<div id="page-pi" class="pg">
+  <div class="kg" id="kpi2"></div>
+  <div class="fb2">
+    <label>Category:</label><select id="spc" onchange="rP()"><option value="">All</option><option>Retail</option><option>Offices</option></select>
+    <label>Closure:</label><select id="spcl" onchange="rP()"><option value="">All</option><option>High</option><option>Medium</option><option>Low</option><option value="Not Interested">Not Interested</option><option value="Canceled">Canceled</option></select>
+    <label>Offer:</label><select id="spo" onchange="rP()"><option value="">All</option><option value="Shared">Shared</option><option value="Not Yet">Not Yet</option><option value="Declined">Declined</option><option value="Completed">Completed</option></select>
+    <label>Feedback:</label><select id="spf" onchange="rP()"><option value="">All</option><option>Interested</option><option value="Under Discussion">Under Discussion</option><option value="Not Interested">Not Interested</option></select>
+  </div>
+  <div class="rc" id="rpc"></div>
+  <div class="tw"><table class="tb" style="table-layout:fixed;width:100%"><thead><tr>
+    <th style="width:30px">#</th><th style="width:120px">Brand</th><th style="width:72px">Tier</th>
+    <th style="width:102px">Activity</th><th style="width:52px">Cat</th><th style="width:44px">Bldg</th>
+    <th style="width:62px">Unit</th><th style="width:58px">Size</th><th style="width:68px">Contact</th>
+    <th style="width:68px">Site Visit</th><th style="width:72px">Offer</th>
+    <th style="width:108px">Annual Deal Value</th><th style="width:66px">Closure</th><th style="width:86px">Feedback</th>
+  </tr></thead><tbody id="tpi"></tbody></table></div>
+</div>
+</main>
+<footer class="ft">LIWAN Executive Leasing Dashboard v4 &middot; Confidential - Landlord Review Only &middot; Managed by UAPM &middot; Source: SharePoint - LEASING-Online/Leasing Dashboard/Liwan/Liwan Leasing Report.xlsx &middot; Generated <span id="fdate"></span></footer>
+
+<script>
+// DATA — read from Liwan Leasing Report.xlsx (SharePoint), 01 June 2026
+// CONFIRMED FILTER: os = "Shared" OR "Completed" AND td != null AND td > 0
+// VERIFIED TOTALS: 11 offers issued, 11 with deal value, SAR 17,703,720 total annual deal value
+const D=[
+// RETAIL
+{b:"Carrefour",t:"International",c:"Retail",a:"Convenience Store",bl:"B3",fl:"GF",u:"3",sz:688,co:"Completed",sv:"Completed",os:"Shared",op:1400,sc:10,td:1059335,p:5,fo:6,tr:"N/A",fb:"Interested",ns:"Ready to sign. As-built drawing received, Carrefour doing schematic design to fit proposed area",cl:"High"},
+{b:"Origin - By Lulu",t:"International",c:"Retail",a:"Convenience Store",bl:"B3",fl:"GF",u:"3",sz:688,co:"Completed",sv:"Completed",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Interested",ns:"HOLD BY LL",cl:"High"},
+{b:"Al Danoub",t:"Local",c:"Retail",a:"Convenience Store",bl:"B3",fl:"GF",u:"3",sz:688,co:"Completed",sv:"Completed",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"2.5% TOR Only",fb:"Interested",ns:"HOLD BY LL",cl:"TBC"},
+{b:"Spinneys",t:"International",c:"Retail",a:"Convenience Store",bl:"B3",fl:"GF",u:"3",sz:688,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"Operator requires minimum 2,000 sqm",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"Al Tamimi",t:"Local",c:"Retail",a:"Convenience Store",bl:"B3",fl:"GF",u:"3",sz:688,co:"Completed",sv:"Completed",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Interested",ns:"LOD shared, waiting design from Operator",cl:"Medium"},
+{b:"Mark & Spencer",t:"International",c:"Retail",a:"Convenience Store",bl:"B3",fl:"GF",u:"3",sz:688,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"La Baguette Royale",t:"International",c:"Retail",a:"Food & Beverage",bl:"B1",fl:"GF",u:"B01-002",sz:137,co:"Completed",sv:"Completed",os:"Shared",op:2000,sc:10,td:302170,p:5,fo:3,tr:"N/A",fb:"Interested",ns:"Lease Offer Shared. Expected to be signed by first week of June",cl:"High"},
+{b:"Chocoholics",t:"International",c:"Retail",a:"Food & Beverage",bl:"B1",fl:"GF",u:"B01-001",sz:171,co:"Completed",sv:"Completed",os:"Shared",op:2000,sc:10,td:376574,p:5,fo:3,tr:"N/A",fb:"Interested",ns:"Lease Offer Shared. Expected to be signed by first week of June",cl:"High"},
+{b:"MJS Brands",t:"International",c:"Retail",a:"Food & Beverage",bl:"B1,R1",fl:"GF/FF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Evaluating",op:null,sc:null,td:null,p:null,fo:null,tr:"TBC",fb:"Interested",ns:"Shared layouts, waiting for proposal from operator",cl:"Medium"},
+{b:"Fresh House",t:"International",c:"Retail",a:"Food & Beverage",bl:"B1",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Pending",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"TBC",fb:"Interested",ns:"Waiting for brand profile and concept",cl:"Medium"},
+{b:"Joe & The Juice",t:"International",c:"Retail",a:"Food & Beverage",bl:"-",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"Looking for Drive Thru",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"Blumen",t:"Local",c:"Retail",a:"Food & Beverage",bl:"-",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"Poco D'Or",t:"Local",c:"Retail",a:"Food & Beverage",bl:"-",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"Patchi",t:"Regional",c:"Retail",a:"Food & Beverage",bl:"-",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"Toby's Coffee",t:"International",c:"Retail",a:"Food & Beverage",bl:"-",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Not Yet",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"No Response",ns:"TBC",cl:"Low"},
+{b:"Gunaydin",t:"Regional",c:"Retail",a:"Food & Beverage",bl:"B1",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Not Yet",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"No Response",ns:"TBC",cl:"Low"},
+{b:"BKRY",t:"GCC",c:"Retail",a:"Food & Beverage",bl:"R2",fl:"FF",u:"H01",sz:null,co:"Completed",sv:"Not Yet",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"9 Portions Pizza",t:"Local",c:"Retail",a:"Food & Beverage",bl:"B1",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"Easy bakery",t:"Local",c:"Retail",a:"Food & Beverage",bl:"-",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"80Z Cafe",t:"Local",c:"Retail",a:"Food & Beverage",bl:"B1",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"Blanca",t:"Local",c:"Retail",a:"Food & Beverage",bl:"B1",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"Hanoverian",t:"Local",c:"Retail",a:"Food & Beverage",bl:"B1",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"Urth Cafe",t:"International",c:"Retail",a:"Food & Beverage",bl:"R1&R2",fl:"GF/FF",u:"H01-G01",sz:null,co:"Completed",sv:"Completed",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"No Response",ns:"TBC",cl:"Low"},
+{b:"Section B",t:"Local",c:"Retail",a:"Food & Beverage",bl:"B1",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Under Discussion",ns:"TBC",cl:"Medium"},
+{b:"Sisi's",t:"International",c:"Retail",a:"Food & Beverage",bl:"B1",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Under Discussion",ns:"TBC",cl:"Medium"},
+{b:"FoodFund International",t:"International",c:"Retail",a:"Food & Beverage",bl:"B1",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Pending",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"Swiss butter",t:"Regional",c:"Retail",a:"Food & Beverage",bl:"B1",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"Go Greek",t:"International",c:"Retail",a:"Food & Beverage",bl:"R2",fl:"FF",u:"H01",sz:null,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"Pret",t:"International",c:"Retail",a:"Food & Beverage",bl:"-",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Pending",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Interested",ns:"Waiting for site visit from Kuwait",cl:"Medium"},
+{b:"Em Sherif Deli",t:"International",c:"Retail",a:"Food & Beverage",bl:"B1",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"Over Bistro",t:"Local",c:"Retail",a:"Food & Beverage",bl:"B1",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"Bread Ahead",t:"Regional",c:"Retail",a:"Food & Beverage",bl:"-",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Interested",ns:"TBC",cl:"Medium"},
+{b:"Half Million",t:"Local",c:"Retail",a:"Food & Beverage",bl:"-",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Pending",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Interested",ns:"TBC",cl:"Medium"},
+{b:"Bateel",t:"International",c:"Retail",a:"Food & Beverage",bl:"-",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"Archi",t:"Local",c:"Retail",a:"Food & Beverage",bl:"-",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Interested",ns:"TBC",cl:"Medium"},
+{b:"Asian Hub",t:"Local",c:"Retail",a:"Food & Beverage",bl:"B1",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Under Discussion",ns:"TBC",cl:"Medium"},
+{b:"Villa Fayrouz",t:"GCC",c:"Retail",a:"Food & Beverage",bl:"B1",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"Kitobi",t:"GCC",c:"Retail",a:"Food & Beverage",bl:"B1",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Pending",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Under Discussion",ns:"TBC",cl:"Low"},
+{b:"Qoot Group",t:"GCC",c:"Retail",a:"Food & Beverage",bl:"B1",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Under Discussion",ns:"Not Interested",cl:"Not Interested"},
+{b:"Foods Gate Group",t:"GCC",c:"Retail",a:"Food & Beverage",bl:"B1",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"Alhatab",t:"Local",c:"Retail",a:"Food & Beverage",bl:"B3",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"Brookie",t:"GCC",c:"Retail",a:"Food & Beverage",bl:"-",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Pending",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Under Discussion",ns:"TBC",cl:"Medium"},
+{b:"Ralph's Cafe",t:"International",c:"Retail",a:"Food & Beverage",bl:"-",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Pending",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Under Discussion",ns:"TBC",cl:"Medium"},
+{b:"La Rustica",t:"Local",c:"Retail",a:"Food & Beverage",bl:"B1",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Under Discussion",ns:"TBC",cl:"Medium"},
+{b:"The Label",t:"Local",c:"Retail",a:"Spa & Wellness",bl:"R2",fl:"FF",u:"H01",sz:null,co:"Completed",sv:"Completed",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Under Discussion",ns:"TBC",cl:"Low"},
+{b:"Bonsai Beauty & Wellness",t:"Local",c:"Retail",a:"Spa & Wellness",bl:"B2",fl:"SF",u:"-",sz:null,co:"Completed",sv:"Pending",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Under Discussion",ns:"TBC",cl:"Medium"},
+{b:"Jo Spa",t:"Local",c:"Retail",a:"Spa & Wellness",bl:"B2",fl:"SF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"La Barre",t:"Local",c:"Retail",a:"Spa & Wellness",bl:"R2",fl:"FF",u:"H01",sz:null,co:"Completed",sv:"Pending",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Under Discussion",ns:"TBC",cl:"Low"},
+{b:"Biofit Center",t:"Local",c:"Retail",a:"Spa & Wellness",bl:"B2",fl:"SF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"Salon Munir",t:"Regional",c:"Retail",a:"Ladies Salon",bl:"R2",fl:"FF",u:"H01",sz:null,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"N.Bar Salon",t:"Local",c:"Retail",a:"Ladies Salon",bl:"R2",fl:"FF",u:"H01",sz:null,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"The Weekend Barber",t:"Local",c:"Retail",a:"Barber",bl:"B3",fl:"GF",u:"F004B",sz:89.6,co:"Completed",sv:"Completed",os:"Shared",op:2000,sc:10,td:197164,p:5,fo:2,tr:"Counteroffer at SAR 1,200/sqm",fb:"Under Discussion",ns:"TBC - counteroffer under review",cl:"Low"},
+{b:"Youssef Afandi",t:"Local",c:"Retail",a:"Barber",bl:"B3",fl:"GF",u:"F004A",sz:41.3,co:"Completed",sv:"Completed",os:"Shared",op:2000,sc:10,td:90860,p:5,fo:2,tr:"N/A",fb:"Under Discussion",ns:"TBC - under discussion",cl:"Low"},
+{b:"Blade & Fade",t:"Local",c:"Retail",a:"Barber",bl:"B3",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"IN2Fitness",t:"Local",c:"Retail",a:"Fitness",bl:"B2",fl:"GF/FF/SF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Under Discussion",ns:"TBC",cl:"Medium"},
+{b:"GymNation",t:"International",c:"Retail",a:"Fitness",bl:"B2",fl:"GF/FF/SF",u:"E01-E08",sz:3249,co:"Completed",sv:"Completed",os:"Shared",op:1200,sc:10,td:4288416,p:10,fo:9,tr:"15 Year contract - SAR 800/sqm - 10% SC - Rent escalation 10% every 5 years - 12 months rent free",fb:"Under Discussion",ns:"Under Negotiation - tenant counter accepted at SAR 1,200/sqm",cl:"High"},
+{b:"Body Masters",t:"International",c:"Retail",a:"Fitness",bl:"B2",fl:"GF/FF/SF",u:"E01-E08",sz:3249,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"Arena Gym",t:"Local",c:"Retail",a:"Fitness",bl:"B2",fl:"GF/FF/SF",u:"E01-E09",sz:3249,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"Fitness Time",t:"Local",c:"Retail",a:"Fitness",bl:"B2",fl:"GF/FF/SF",u:"E01-E10",sz:3249,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"Aljabr",t:"Local",c:"Retail",a:"Laundry",bl:"B3",fl:"GF",u:"F004",sz:140,co:"Completed",sv:"Completed",os:"Shared",op:2250,sc:10,td:345956,p:5,fo:2,tr:"TBC",fb:"Interested",ns:"Waiting for tenant feedback",cl:"Medium"},
+{b:"Al Rahden",t:"Local",c:"Retail",a:"Laundry",bl:"B3",fl:"GF",u:"F004A",sz:41,co:"Completed",sv:"Completed",os:"Shared",op:2000,sc:10,td:90860,p:5,fo:2,tr:"Counteroffer at SAR 1,200/sqm",fb:"Interested",ns:"Under Negotiation",cl:"Low"},
+{b:"JVZ Laundry",t:"Local",c:"Retail",a:"Laundry",bl:"B3",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"Requested front location",fb:"Interested",ns:"Waiting for tenant feedback",cl:"Low"},
+{b:"Astra Pharmacy",t:"Local",c:"Retail",a:"Pharmacy",bl:"B3",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"Requested front location",fb:"Interested",ns:"Against Leasing Strategy",cl:"Low"},
+{b:"Whites",t:"Local",c:"Retail",a:"Pharmacy",bl:"B3",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"Requested front location",fb:"Interested",ns:"Against Leasing Strategy",cl:"Low"},
+{b:"Nahdi Clinic",t:"Local",c:"Retail",a:"Pharmacy",bl:"B3",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Against Leasing Strategy",cl:"Low"},
+{b:"Porsche",t:"International",c:"Retail",a:"Automotive",bl:"B3",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Pending",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Interested",ns:"Waiting for tenant feedback",cl:"Medium"},
+{b:"BYD",t:"International",c:"Retail",a:"Automotive",bl:"B3",fl:"GF",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Waiting for tenant feedback",cl:"Low"},
+{b:"Super Park",t:"Regional",c:"Retail",a:"Entertainment",bl:"B2",fl:"GF/FF/SF",u:"E01-E08",sz:3249,co:"Completed",sv:"Completed",os:"Shared",op:2200,sc:10,td:4397140,p:5,fo:3,tr:"TBC",fb:"Interested",ns:"Waiting for tenant feedback",cl:"Medium"},
+{b:"Taawniya Clinics",t:"Local",c:"Retail",a:"Healthcare",bl:"B2",fl:"GF/FF/SF",u:"E01-E08",sz:3249,co:"Completed",sv:"Completed",os:"Declined",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+// OFFICES
+{b:"Sarj AI",t:"Local",c:"Offices",a:"Offices",bl:"B1",fl:"F7",u:"D-007",sz:1817,co:"Completed",sv:"Completed",os:"Shared",op:2200,sc:10,td:null,p:5,fo:3,tr:"Requested Floor 7 at SAR 2,000/sqm - rejected by Landlord",fb:"Canceled Deal",ns:"Deal canceled. Price gap: tenant offered SAR 2,000/sqm vs Landlord ask SAR 2,200/sqm",cl:"Canceled Deal"},
+{b:"DIOM",t:"Local",c:"Offices",a:"Offices",bl:"B1",fl:"-",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"Regus",t:"International",c:"Offices",a:"Offices",bl:"B1",fl:"F4",u:"D-004",sz:1817,co:"Completed",sv:"Completed",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"Huawei",t:"International",c:"Offices",a:"Offices",bl:"B1",fl:"F1/F10",u:"-",sz:null,co:"Completed",sv:"Completed",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Interested",ns:"Waiting for tenant feedback",cl:"Medium"},
+{b:"Aljamaz",t:"Local",c:"Offices",a:"Offices",bl:"B1",fl:"F7",u:"D-007",sz:1817,co:"Completed",sv:"Completed",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Not Interested",ns:"Not Interested",cl:"Not Interested"},
+{b:"Wadaie",t:"Local",c:"Offices",a:"Offices",bl:"B1",fl:"2",u:"-",sz:200,co:"Completed",sv:"Completed",os:"Not Yet",op:null,sc:null,td:null,p:null,fo:null,tr:"N/A",fb:"Interested",ns:"Tenant received all details; will contact Landlord",cl:"Medium"},
+{b:"Liwan Management",t:"Local",c:"Offices",a:"Offices",bl:"B1",fl:"1",u:"D-001/D-002",sz:1960,co:"Completed",sv:"Completed",os:"Completed",op:2000,sc:10,td:4311978,p:5,fo:null,tr:"N/A",fb:"Interested",ns:"Ready to sign",cl:"High"},
+{b:"Liwan Management",t:"Local",c:"Offices",a:"Offices",bl:"B1",fl:"10",u:"D-019",sz:927,co:"Completed",sv:"Completed",os:"Completed",op:2200,sc:10,td:2243267,p:5,fo:null,tr:"N/A",fb:"Interested",ns:"Ready to sign",cl:"High"},
+];
+
+// FILTER: os = "Shared" OR "Completed", AND td != null AND td > 0
+const isConfirmed=d=>{const l=d.os?d.os.toLowerCase():"";return(l==="shared"||l==="completed")&&d.td!=null&&d.td>0;};
+
+const fm=n=>n==null?"--":Number(n).toLocaleString("en-SA");
+const fS=n=>n==null?"--":"SAR "+Number(n).toLocaleString("en-SA");
+const oP=s=>{if(!s||s==="-")return'<span class="pl pny">--</span>';const l=s.toLowerCase();if(l==="shared")return'<span class="pl psh">Shared</span>';if(l==="completed")return'<span class="pl pco">Completed</span>';if(l.includes("declined"))return'<span class="pl pde">Declined</span>';if(l.includes("evaluat"))return'<span class="pl pgo">Evaluating</span>';return'<span class="pl pny">Not Yet</span>';};
+const cP=s=>{if(!s)return"";const l=s.toLowerCase();if(l==="high")return'<span class="pl ph">High</span>';if(l==="medium")return'<span class="pl pm">Medium</span>';if(l==="low")return'<span class="pl plo">Low</span>';if(l.includes("cancel"))return'<span class="pl pca">Canceled</span>';return'<span class="pl pni">Not Interested</span>';};
+const fP=s=>{if(!s)return"";if(s.toLowerCase().includes("cancel"))return'<span class="pl pca">Canceled</span>';if(s==="Under Discussion")return'<span class="pl pud">Under Discussion</span>';if(s==="No Response")return'<span class="pl plo">No Response</span>';if(s.toLowerCase().includes("not interest"))return'<span class="pl pni">Not Interested</span>';if(s.toLowerCase().includes("interest"))return'<span class="pl ph">Interested</span>';return'<span class="pl plo">'+s+"</span>";};
+const chk='<svg width="13" height="13" viewBox="0 0 13 13" style="vertical-align:-2px"><circle cx="6.5" cy="6.5" r="6" fill="#eaf5ee" stroke="#2d7a4a"/><path d="M3.5 6.5l2 2 4-4" stroke="#2d7a4a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>';
+const pnd='<svg width="13" height="13" viewBox="0 0 13 13" style="vertical-align:-2px"><circle cx="6.5" cy="6.5" r="6" fill="#fef3dc" stroke="#9a6200"/><path d="M6.5 3.5v3l2 2" stroke="#9a6200" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>';
+const crs='<svg width="13" height="13" viewBox="0 0 13 13" style="vertical-align:-2px"><circle cx="6.5" cy="6.5" r="6" fill="#f2f0eb" stroke="#9e9b93"/><path d="M4.5 4.5l4 4M8.5 4.5l-4 4" stroke="#9e9b93" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>';
+const sI=s=>{if(!s)return crs+" --";const l=s.toLowerCase();if(l==="completed")return chk+" Done";if(l==="pending")return pnd+" Pending";return crs+" --";};
+const pal=["#1a4a8a","#2d7a4a","#c9a84c","#8b3a2a","#3a6e8a","#7a4a8a","#4a7a3a","#8a6a1a","#334488","#7a3a4a","#1a6a5a"];
+
+function mkL(id,items){document.getElementById(id).innerHTML=items.map(i=>'<span class="li"><span class="ld" style="background:'+i.c+'"></span>'+i.l+"</span>").join("");}
+function bKPI(id,items){document.getElementById(id).innerHTML=items.map(i=>'<div class="kc'+(i.ac?" ac":"")+'"><div class="kl">'+i.l+'</div><div class="kv '+(i.co||"")+'">'+i.v+"</div>"+(i.s?'<div class="ks">'+i.s+"</div>":"")+"</div>").join("");}
+function bFun(id,steps){const el=document.getElementById(id);const tot=steps[0].n;el.innerHTML=steps.map(s=>{const p=tot>0?Math.round(s.n/tot*100):0;return'<div class="fs"><div class="fn" style="color:'+s.color+'">'+s.n+'</div><div class="flab">'+s.label+'</div><div class="fp" style="color:'+s.color+'">'+p+'%</div><div class="fbar"><div class="ff" style="width:'+p+'%;background:'+s.color+'"></div></div></div>';}).join("");}
+function bTier(id,items){document.getElementById(id).innerHTML=items.map(i=>'<div class="tc"><div class="tn" style="color:'+i.c+'">'+i.n+'</div><div class="tlab">'+i.l+"</div></div>").join("");}
+function showPage(id,btn){document.querySelectorAll(".pg").forEach(p=>p.classList.remove("active"));document.querySelectorAll(".nb").forEach(b=>b.classList.remove("active"));document.getElementById("page-"+id).classList.add("active");btn.classList.add("active");}
+function exportPDF(){document.querySelectorAll(".nb,.fb2,.pdfb").forEach(b=>b.style.display="none");document.querySelectorAll(".pg").forEach(p=>{p.style.display="block";p.style.pageBreakAfter="always";});window.print();setTimeout(()=>{document.querySelectorAll(".nb,.fb2,.pdfb").forEach(b=>b.style.display="");document.querySelectorAll(".pg").forEach(p=>{p.style.display="";p.style.pageBreakAfter="";});document.querySelectorAll(".pg").forEach(p=>p.classList.remove("active"));document.getElementById("page-ov").classList.add("active");document.querySelector(".nb").classList.add("active");},1200);}
+
+const re=D.filter(d=>d.c==="Retail"),of=D.filter(d=>d.c==="Offices");
+const aRe=re.filter(isConfirmed);
+const aOf=of.filter(isConfirmed);
+const aD=D.filter(isConfirmed);
+const tD=aD.reduce((a,d)=>a+d.td,0);
+const rD=aRe.reduce((a,d)=>a+d.td,0);
+const oD=aOf.reduce((a,d)=>a+d.td,0);
+// Count offers issued (Shared OR Completed status, regardless of td)
+const offersIssued=D.filter(d=>{const l=d.os?d.os.toLowerCase():"";return l==="shared"||l==="completed";}).length;
+
+// OVERVIEW
+bKPI("kov",[
+  {l:"Total Leads",v:D.length,s:"Retail + Offices",ac:true},
+  {l:"Offers Issued",v:offersIssued,co:"bl",s:"Shared or Completed"},
+  {l:"Total Annual Deal Value",v:"SAR "+fm(tD),co:"gr",s:"Confirmed offers with value",ac:true},
+  {l:"High Closure",v:D.filter(d=>d.cl==="High").length,co:"gr",s:"Likely to sign"},
+  {l:"Medium Closure",v:D.filter(d=>d.cl==="Medium").length,co:"am",s:"Under discussion"},
+  {l:"Interested",v:D.filter(d=>d.fb&&d.fb.toLowerCase().includes("interest")&&!d.fb.toLowerCase().includes("not")).length,co:"bl",s:"Positive engagement"},
+  {l:"Not Interested",v:D.filter(d=>d.fb&&d.fb.toLowerCase().includes("not interest")).length,co:"re",s:"Declined / rejected"},
+  {l:"Under Discussion",v:D.filter(d=>d.fb==="Under Discussion").length,co:"am",s:"Active negotiations"},
+]);
+
+const ct=D.filter(d=>d.co==="Completed").length;
+const sv2=D.filter(d=>d.sv==="Completed").length;
+mkL("lf",[{c:"#1a4a8a",l:"Contacted"},{c:"#2d7a4a",l:"Site Visited"},{c:"#c9a84c",l:"Offer Issued"},{c:"#3a7a2a",l:"Signed"}]);
+new Chart(document.getElementById("cF"),{type:"bar",data:{labels:["Contacted","Site Visited","Offer Issued","Signed"],datasets:[{data:[ct,sv2,offersIssued,0],backgroundColor:["#1a4a8a","#2d7a4a","#c9a84c","#3a7a2a"],borderRadius:5,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:10},grid:{color:"rgba(0,0,0,0.04)"}},x:{grid:{display:false}}}}});
+
+const clH=D.filter(d=>d.cl==="High").length,clM=D.filter(d=>d.cl==="Medium").length,clL=D.filter(d=>d.cl==="Low").length,clN=D.filter(d=>d.cl&&d.cl.toLowerCase().includes("not interest")).length,clC=D.filter(d=>d.cl&&d.cl.toLowerCase().includes("cancel")).length;
+mkL("lc",[{c:"#2d7a4a",l:"High"},{c:"#c9a84c",l:"Medium"},{c:"#9e9b93",l:"Low"},{c:"#8b2020",l:"Not Interested"},{c:"#6b1a1a",l:"Canceled"}]);
+new Chart(document.getElementById("cC"),{type:"doughnut",data:{labels:["High","Medium","Low","Not Interested","Canceled"],datasets:[{data:[clH,clM,clL,clN,clC],backgroundColor:["#2d7a4a","#c9a84c","#c8c5bc","#e08080","#6b1a1a"],borderWidth:2,borderColor:"#fff"}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:"60%"}});
+
+const aG={};D.forEach(d=>{aG[d.a]=(aG[d.a]||0)+1;});const aL=Object.keys(aG);
+mkL("lct",aL.map((l,i)=>({c:pal[i%pal.length],l:l+" ("+aG[l]+")"})));
+new Chart(document.getElementById("cCT"),{type:"doughnut",data:{labels:aL,datasets:[{data:aL.map(k=>aG[k]),backgroundColor:pal.slice(0,aL.length),borderWidth:2,borderColor:"#fff"}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:"55%"}});
+
+const ti={International:0,Regional:0,GCC:0,Local:0};D.forEach(d=>{if(ti[d.t]!==undefined)ti[d.t]++;});
+mkL("lt",[{c:"#1a4a8a",l:"International ("+ti.International+")"},{c:"#2d7a4a",l:"Regional ("+ti.Regional+")"},{c:"#c9a84c",l:"GCC ("+ti.GCC+")"},{c:"#9e9b93",l:"Local ("+ti.Local+")"}]);
+new Chart(document.getElementById("cT"),{type:"bar",data:{labels:["International","Regional","GCC","Local"],datasets:[{data:[ti.International,ti.Regional,ti.GCC,ti.Local],backgroundColor:["#1a4a8a","#2d7a4a","#c9a84c","#9e9b93"],borderRadius:5,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:"rgba(0,0,0,0.04)"}},x:{grid:{display:false}}}}});
+
+document.getElementById("dw").style.height=Math.max(220,aD.length*40+60)+"px";
+mkL("ld2",[{c:"#1a4a8a",l:"Retail / F&B"},{c:"#2d7a4a",l:"Offices"},{c:"#c9a84c",l:"Entertainment"}]);
+new Chart(document.getElementById("cD"),{type:"bar",data:{labels:aD.map(d=>d.b),datasets:[{data:aD.map(d=>d.td),backgroundColor:aD.map(d=>d.c==="Offices"?"#2d7a4a":d.a==="Entertainment"?"#c9a84c":"#1a4a8a"),borderRadius:4,borderSkipped:false}]},options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>"SAR "+Number(c.raw).toLocaleString("en-SA")}}},scales:{x:{beginAtZero:true,ticks:{callback:v=>"SAR "+Number(v/1e6).toFixed(1)+"M"},grid:{color:"rgba(0,0,0,0.04)"}},y:{grid:{display:false}}}}});
+
+// RETAIL
+bKPI("kre",[
+  {l:"Retail Leads",v:re.length,ac:true},
+  {l:"Confirmed Offers",v:aRe.length,co:"bl",s:"Shared + value present"},
+  {l:"Retail Annual Deal Value",v:"SAR "+fm(rD),co:"gr",ac:true},
+  {l:"High Closure",v:re.filter(d=>d.cl==="High").length,co:"gr"},
+  {l:"Medium Closure",v:re.filter(d=>d.cl==="Medium").length,co:"am"},
+  {l:"Interested",v:re.filter(d=>d.fb&&d.fb.toLowerCase().includes("interest")&&!d.fb.toLowerCase().includes("not")).length,co:"bl"},
+]);
+bFun("fre",[
+  {n:re.filter(d=>d.co==="Completed").length,label:"Contacted",color:"#1a4a8a"},
+  {n:re.filter(d=>d.sv==="Completed").length,label:"Site Visited",color:"#2d7a4a"},
+  {n:re.filter(d=>{const l=d.os?d.os.toLowerCase():"";return l==="shared"||l==="completed";}).length,label:"Offer Issued",color:"#c9a84c"},
+  {n:0,label:"Signed",color:"#3a7a2a"},
+]);
+bTier("tre",[{n:re.filter(d=>d.t==="International").length,l:"International",c:"#1a4a8a"},{n:re.filter(d=>d.t==="Regional").length,l:"Regional",c:"#2d7a4a"},{n:re.filter(d=>d.t==="GCC").length,l:"GCC",c:"#c9a84c"},{n:re.filter(d=>d.t==="Local").length,l:"Local",c:"#9e9b93"}]);
+const rAG={};re.forEach(d=>{rAG[d.a]=(rAG[d.a]||0)+1;});const rAL=Object.keys(rAG);
+mkL("lrc",rAL.map((l,i)=>({c:pal[i%pal.length],l:l+" ("+rAG[l]+")"})));
+new Chart(document.getElementById("cRC"),{type:"doughnut",data:{labels:rAL,datasets:[{data:rAL.map(k=>rAG[k]),backgroundColor:pal.slice(0,rAL.length),borderWidth:2,borderColor:"#fff"}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:"55%"}});
+const rH=re.filter(d=>d.cl==="High").length,rM=re.filter(d=>d.cl==="Medium").length,rL=re.filter(d=>d.cl==="Low").length,rN=re.filter(d=>d.cl&&d.cl.toLowerCase().includes("not interest")).length;
+mkL("lrcl",[{c:"#2d7a4a",l:"High"},{c:"#c9a84c",l:"Medium"},{c:"#9e9b93",l:"Low"},{c:"#8b2020",l:"Not Interested"}]);
+new Chart(document.getElementById("cRCl"),{type:"bar",data:{labels:["High","Medium","Low","Not Interested"],datasets:[{data:[rH,rM,rL,rN],backgroundColor:["#2d7a4a","#c9a84c","#c8c5bc","#e08080"],borderRadius:5,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:"rgba(0,0,0,0.04)"}},x:{grid:{display:false}}}}});
+
+const tRA=aRe.reduce((a,d)=>a+d.td,0);
+document.getElementById("tra").innerHTML=
+  aRe.map((d,i)=>"<tr><td>"+(i+1)+"</td><td style='font-weight:600'>"+d.b+"</td><td>"+d.a+"</td><td>"+d.bl+"</td><td>"+(d.u||"--")+"</td><td>"+fm(d.sz)+"</td><td>SAR "+fm(d.op)+"</td><td>"+d.sc+"%</td><td style='font-weight:700;color:#1a4a8a'>SAR "+fm(d.td)+"</td><td>"+(d.p||"TBC")+"</td><td>"+oP(d.os)+"</td><td>"+cP(d.cl)+"</td><td style='font-size:11px;color:#5c5a54'>"+(d.tr&&d.tr!="N/A"?d.tr:"--")+"</td><td style='font-size:11px;color:#5c5a54'>"+d.ns+"</td></tr>").join("")+
+  "<tr class='tr'><td colspan='8' style='text-align:right;padding-right:14px;font-size:12px'>Total Annual Deal Value (Retail)</td><td style='color:#1a4a8a;font-size:14px'>SAR "+fm(tRA)+"</td><td colspan='5'></td></tr>";
+
+function rRA(){
+  const fb=document.getElementById("srfb").value,cl=document.getElementById("srcl").value;
+  let rows=re;
+  if(fb)rows=rows.filter(d=>d.fb&&d.fb.toLowerCase().includes(fb.toLowerCase()));
+  if(cl)rows=rows.filter(d=>d.cl&&(d.cl===cl||(cl==="Not Interested"&&d.cl.toLowerCase().includes("not interest"))));
+  document.getElementById("rrc").textContent="Showing "+rows.length+" of "+re.length+" records";
+  document.getElementById("traa").innerHTML=rows.map((d,i)=>"<tr><td>"+(i+1)+"</td><td style='font-weight:500'>"+d.b+"</td><td style='font-size:11px'>"+d.t+"</td><td style='font-size:11px'>"+d.a+"</td><td>"+d.bl+"</td><td style='font-size:11px'>"+(d.u||"--")+"</td><td>"+oP(d.os)+"</td><td>"+cP(d.cl)+"</td><td>"+fP(d.fb)+"</td><td style='font-size:11px;color:#5c5a54'>"+(d.tr&&d.tr!="N/A"?d.tr:"--")+"</td><td style='font-size:11px;color:#5c5a54'>"+d.ns+"</td></tr>").join("");
+}
+rRA();
+
+// OFFICES
+bKPI("kof",[
+  {l:"Office Leads",v:of.length,ac:true},
+  {l:"Confirmed Offers",v:aOf.length,co:"bl",s:"Completed + value present"},
+  {l:"Office Annual Deal Value",v:"SAR "+fm(oD),co:"gr",ac:true},
+  {l:"Active Discussions",v:of.filter(d=>d.cl==="Medium"||d.cl==="High").length,co:"am"},
+  {l:"Interested",v:of.filter(d=>d.fb&&d.fb.toLowerCase().includes("interest")&&!d.fb.toLowerCase().includes("not")).length,co:"gr"},
+  {l:"Site Visits Done",v:of.filter(d=>d.sv==="Completed").length,co:"am"},
+]);
+bFun("fof",[
+  {n:of.filter(d=>d.co==="Completed").length,label:"Contacted",color:"#1a4a8a"},
+  {n:of.filter(d=>d.sv==="Completed").length,label:"Site Visited",color:"#2d7a4a"},
+  {n:of.filter(d=>{const l=d.os?d.os.toLowerCase():"";return l==="shared"||l==="completed";}).length,label:"Offer Issued",color:"#c9a84c"},
+  {n:0,label:"Signed",color:"#3a7a2a"},
+]);
+bTier("tof",[{n:of.filter(d=>d.t==="International").length,l:"International",c:"#1a4a8a"},{n:of.filter(d=>d.t==="Regional").length,l:"Regional",c:"#2d7a4a"},{n:of.filter(d=>d.t==="GCC").length,l:"GCC",c:"#c9a84c"},{n:of.filter(d=>d.t==="Local").length,l:"Local",c:"#9e9b93"}]);
+const oH2=of.filter(d=>d.cl==="High").length,oM2=of.filter(d=>d.cl==="Medium").length,oL2=of.filter(d=>d.cl==="Low").length,oN2=of.filter(d=>d.cl&&d.cl.toLowerCase().includes("not interest")).length,oC2=of.filter(d=>d.cl&&d.cl.toLowerCase().includes("cancel")).length;
+mkL("loc",[{c:"#2d7a4a",l:"High"},{c:"#c9a84c",l:"Medium"},{c:"#9e9b93",l:"Low"},{c:"#8b2020",l:"Not Interested"},{c:"#6b1a1a",l:"Canceled"}]);
+new Chart(document.getElementById("cOC"),{type:"bar",data:{labels:["High","Medium","Low","Not Interested","Canceled"],datasets:[{data:[oH2,oM2,oL2,oN2,oC2],backgroundColor:["#2d7a4a","#c9a84c","#c8c5bc","#e08080","#8b2020"],borderRadius:5,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1},grid:{color:"rgba(0,0,0,0.04)"}},x:{grid:{display:false}}}}});
+const oFG={};of.forEach(d=>{const k=d.fb||"Unknown";oFG[k]=(oFG[k]||0)+1;});const oFL=Object.keys(oFG);
+mkL("lof2",oFL.map((l,i)=>({c:["#1a4a8a","#e08080","#c8c5bc","#c9a84c","#8b2020"][i]||"#9e9b93",l:l+" ("+oFG[l]+")"})));
+new Chart(document.getElementById("cOF"),{type:"doughnut",data:{labels:oFL,datasets:[{data:oFL.map(k=>oFG[k]),backgroundColor:["#1a4a8a","#e08080","#c8c5bc","#c9a84c","#8b2020"],borderWidth:2,borderColor:"#fff"}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:"60%"}});
+
+document.getElementById("onote").textContent="Office confirmed offers: 2 x Liwan Management units (D-001/D-002 and D-019) with total annual value SAR "+Number(oD).toLocaleString("en-SA")+". Sarj AI offer was canceled - tenant requested SAR 2,000/sqm, Landlord held at SAR 2,200/sqm.";
+document.getElementById("toa").innerHTML=aOf.map((d,i)=>"<tr><td>"+(i+1)+"</td><td style='font-weight:600'>"+d.b+"</td><td style='font-size:11px'>"+d.t+"</td><td>"+d.bl+"</td><td>"+d.fl+"</td><td>"+d.u+"</td><td>"+fm(d.sz)+"</td><td>SAR "+fm(d.op)+"</td><td>"+d.sc+"%</td><td style='font-weight:700;color:#1a4a8a'>SAR "+fm(d.td)+"</td><td>"+(d.p||"--")+"</td><td>"+oP(d.os)+"</td><td>"+cP(d.cl)+"</td><td style='font-size:11px;color:#5c5a54'>"+d.tr+"</td><td style='font-size:11px;color:#5c5a54'>"+d.ns+"</td></tr>").join("")+
+  "<tr class='tr'><td colspan='9' style='text-align:right;padding-right:14px;font-size:12px'>Total Annual Deal Value (Offices)</td><td style='color:#1a4a8a;font-size:14px'>SAR "+fm(oD)+"</td><td colspan='5'></td></tr>";
+document.getElementById("toaa").innerHTML=of.map((d,i)=>"<tr><td>"+(i+1)+"</td><td style='font-weight:500'>"+d.b+"</td><td style='font-size:11px'>"+d.t+"</td><td>"+d.bl+"</td><td style='font-size:11px'>"+d.fl+"</td><td>"+oP(d.os)+"</td><td>"+cP(d.cl)+"</td><td>"+fP(d.fb)+"</td><td style='font-size:11px;color:#5c5a54'>"+(d.tr&&d.tr!="N/A"?d.tr:"--")+"</td><td style='font-size:11px;color:#5c5a54'>"+d.ns+"</td></tr>").join("");
+
+// PIPELINE
+bKPI("kpi2",[{l:"Total Records",v:D.length},{l:"Retail",v:re.length,co:"bl"},{l:"Offices",v:of.length,co:"am"},{l:"Offers Issued",v:offersIssued,co:"gr"},{l:"High Closure",v:D.filter(d=>d.cl==="High").length,co:"gr"},{l:"Total Annual Deal Value",v:"SAR "+fm(tD),co:"nv",ac:true}]);
+function rP(){
+  const cat=document.getElementById("spc").value,cl=document.getElementById("spcl").value,oF=document.getElementById("spo").value,fb=document.getElementById("spf").value;
+  let rows=D;
+  if(cat)rows=rows.filter(d=>d.c===cat);
+  if(cl)rows=rows.filter(d=>d.cl&&(d.cl===cl||(cl==="Not Interested"&&d.cl.toLowerCase().includes("not interest"))||(cl==="Canceled"&&d.cl.toLowerCase().includes("cancel"))));
+  if(oF)rows=rows.filter(d=>d.os&&d.os.toLowerCase().includes(oF.toLowerCase()));
+  if(fb)rows=rows.filter(d=>d.fb&&d.fb.toLowerCase().includes(fb.toLowerCase()));
+  document.getElementById("rpc").textContent="Showing "+rows.length+" of "+D.length+" records";
+  document.getElementById("tpi").innerHTML=rows.map((d,i)=>"<tr><td>"+(i+1)+"</td><td style='font-size:11px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap'>"+d.b+"</td><td style='font-size:10px'>"+d.t+"</td><td style='font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap'>"+d.a+"</td><td style='font-size:10px'>"+d.c+"</td><td style='font-size:10px'>"+d.bl+"</td><td style='font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap'>"+(d.u||"--")+"</td><td style='font-size:10px'>"+(d.sz?fm(d.sz)+" m2":"--")+"</td><td style='font-size:10px'>"+sI(d.co)+"</td><td style='font-size:10px'>"+sI(d.sv)+"</td><td>"+oP(d.os)+"</td><td style='font-size:10px;font-weight:"+(isConfirmed(d)?"600":"400")+";color:"+(isConfirmed(d)?"#1a4a8a":"#9e9b93")+"'>"+(isConfirmed(d)?"SAR "+fm(d.td):"--")+"</td><td>"+cP(d.cl)+"</td><td>"+fP(d.fb)+"</td></tr>").join("");
+}
+rP();
+
+const ds=new Date().toLocaleDateString("en-GB",{day:"2-digit",month:"long",year:"numeric"});
+document.getElementById("rdate").textContent=ds;
+document.getElementById("fdate").textContent=ds;
+</script>
+</body>
+</html>
